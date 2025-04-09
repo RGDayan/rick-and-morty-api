@@ -5,15 +5,19 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.mathieu.cleanrmapi.data.local.CharacterDAO
 import org.mathieu.cleanrmapi.data.local.EpisodeDAO
+import org.mathieu.cleanrmapi.data.local.LocationDAO
 import org.mathieu.cleanrmapi.data.local.RMDatabase
 import org.mathieu.cleanrmapi.data.local.getRoomDatabase
 import org.mathieu.cleanrmapi.data.remote.CharacterApi
 import org.mathieu.cleanrmapi.data.remote.EpisodeApi
+import org.mathieu.cleanrmapi.data.remote.LocationApi
 import org.mathieu.cleanrmapi.data.remote.createHttpClient
 import org.mathieu.cleanrmapi.data.repositories.CharacterRepositoryImpl
 import org.mathieu.cleanrmapi.data.repositories.EpisodeRepositoryImpl
+import org.mathieu.cleanrmapi.data.repositories.LocationRepositoryImpl
 import org.mathieu.cleanrmapi.domain.character.CharacterRepository
 import org.mathieu.cleanrmapi.domain.episode.EpisodeRepository
+import org.mathieu.cleanrmapi.domain.location.LocationRepository
 
 private const val RM_API_URL = "https://rickandmortyapi.com/api/"
 
@@ -21,6 +25,11 @@ expect val databaseBuilderModule: Module
 
 expect val dataStoreModule: Module
 
+/**
+ * This module injects KTor linked components as singleton
+ * It configures and injects a HttpClient that is used by Apis
+ * It also inject singleton instances of Apis
+ */
 val remoteModule = module {
 
     single<HttpClient> {
@@ -30,16 +39,25 @@ val remoteModule = module {
     }
     single { CharacterApi(get()) }
     single { EpisodeApi(get()) }
+    single { LocationApi(get()) }
 }
 
+/**
+ * This module injects this app's repositories
+ */
 val repositoriesModule = module {
 
     single<CharacterRepository> { CharacterRepositoryImpl(get(), get(), get(), get()) }
 
     single<EpisodeRepository> { EpisodeRepositoryImpl(get()) }
 
+    single<LocationRepository> { LocationRepositoryImpl(get()) }
+
 }
 
+/**
+ * This module injects this app's database and its entities
+ */
 val databaseModule = module {
 
     single<RMDatabase> {
@@ -55,5 +73,11 @@ val databaseModule = module {
         val db: RMDatabase = get()
         db.episodeDAO()
     }
+
+    single<LocationDAO> {
+        val db: RMDatabase = get()
+        db.locationDAO()
+    }
+
 
 }
