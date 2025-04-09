@@ -118,6 +118,41 @@ internal class CharacterRepositoryImpl(
 
     }
 
+    override suspend fun getCharactersFromIdList(@MustBeCommaSeparatedIds idList: String): List<Character> {
+        // Convert the comma-separated string to a list of integers
+        val ids = idList.split(",").mapNotNull { it.toIntOrNull() }
+
+        // Retrieve characters from the local database
+        val localCharacters = characterDAO.getCharactersByIds(ids)
+        val localMap = localCharacters.associateBy { it.id }
+
+        // Filter out missing IDs
+        val missingIds = ids.filterNot { localMap.containsKey(it) }
+
+        // Fetch missing characters from the API
+        val fetchedFromApi = if (missingIds.isNotEmpty()) {
+            val fetched = if (missingIds.size == 1) {
+                characterApi.getCharacter(missingIds.first())
+                    ?.let { listOf(it) }
+                    ?: emptyList()
+            } else {
+                characterApi.getCharactersFromIds(missingIds.joinToString(","))
+            }
+
+            // Persist fetched characters to the local database
+            val fetchedObjects = fetched.map { it.toDBObject() }
+            characterDAO.saveCharacters(fetchedObjects)
+
+            // Return fetched characters from API into the variable fetchedFromAPI
+            fetchedObjects
+        } else emptyList()
+
+        // Return the combined result of local and fetched characters
+        return (localCharacters + fetchedFromApi)
+            .sortedBy { it.id }
+            .map { it.toModel() }
+    }
+
 }
 /**
  * Orchestrates the retrieval of a CharacterObject by attempting to fetch it locally first,

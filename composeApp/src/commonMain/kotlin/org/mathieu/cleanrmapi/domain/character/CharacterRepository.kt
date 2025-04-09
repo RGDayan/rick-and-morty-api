@@ -36,4 +36,17 @@ interface CharacterRepository {
      */
     suspend fun getEpisodesWhere(characterId: Int): List<Episode>
 
+    /**
+     * Retrieves characters by a comma-separated list of IDs.
+     *
+     * Fetches characters from the local database. For any missing characters, it fetches them from the API,
+     * saves them locally, and returns all found characters sorted by ID.
+     *
+     * @param idList Comma-separated string of character IDs (e.g., "1,2,3").
+     * @return List of [Character] objects, sorted by ID.
+     * @throws NumberFormatException If `idList` contains non-numeric values.
+     * @throws Exception If there's an issue with the API or database.
+     * @throws NoSuchElementException if a provided id does not exist in the db nor api.
+     */
+    suspend fun getCharactersFromIdList(idList: String): List<Character>
 }

@@ -13,6 +13,9 @@ interface CharacterDAO {
     @Query("select * from ${RMDatabase.CHARACTER_TABLE}")
     fun getCharacters(): Flow<List<CharacterObject>>
 
+    @Query("SELECT * FROM ${RMDatabase.CHARACTER_TABLE} WHERE id IN (:ids)")
+    suspend fun getCharactersByIds(ids: List<Int>): List<CharacterObject>
+
     @Query("select * from ${RMDatabase.CHARACTER_TABLE} where id = :id")
     suspend fun getCharacter(id: Int): CharacterObject?
 
@@ -21,5 +24,4 @@ interface CharacterDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(character: CharacterObject)
-
 }
