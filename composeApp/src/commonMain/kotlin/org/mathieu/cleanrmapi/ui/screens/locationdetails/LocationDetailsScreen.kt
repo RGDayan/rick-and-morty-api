@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mathieu.cleanrmapi.ui.NavigationManager
 import org.mathieu.cleanrmapi.ui.core.composables.BackArrow
 import org.mathieu.cleanrmapi.ui.core.composables.IconWithImage
@@ -28,6 +29,7 @@ import org.mathieu.cleanrmapi.ui.core.composables.Screen
 import org.mathieu.cleanrmapi.ui.core.theme.SurfaceColor
 import org.mathieu.cleanrmapi.ui.core.composables.ErrorView
 import org.mathieu.cleanrmapi.ui.core.composables.CharacterList
+import org.mathieu.cleanrmapi.ui.core.composables.PreviewContent
 
 /**
  * Displays the details for a given location.
@@ -144,4 +146,10 @@ private fun Header(state: LocationDetailsState.Loaded) {
 
     }
 
+}
+
+@Preview
+@Composable
+private fun LocationDetailsPreview() = PreviewContent {
+    Content()
 }
