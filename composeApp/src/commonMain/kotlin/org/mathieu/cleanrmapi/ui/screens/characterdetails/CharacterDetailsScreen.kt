@@ -2,7 +2,6 @@ package org.mathieu.cleanrmapi.ui.screens.characterdetails
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
@@ -49,6 +49,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mathieu.cleanrmapi.domain.character.models.CharacterGender
 import org.mathieu.cleanrmapi.domain.character.models.CharacterStatus
 import org.mathieu.cleanrmapi.domain.episode.models.Episode
+import org.mathieu.cleanrmapi.domain.location.models.LocationPreview
 import org.mathieu.cleanrmapi.ui.core.composables.Avatar
 import org.mathieu.cleanrmapi.ui.core.composables.BackArrow
 import org.mathieu.cleanrmapi.ui.core.composables.IconWithImage
@@ -110,7 +111,7 @@ private fun Content(
                 onAction = onAction
             )
             CharacterDetailsState.Loading -> {
-                /** TODO: Could display a Loading Animation */
+                CircularProgressIndicator()
             }
         }
     }
@@ -150,7 +151,8 @@ private object CharacterDetailsContent {
 
             Header(
                 state = state,
-                offsetY = offsetY
+                offsetY = offsetY,
+                onAction = onAction
             )
 
             LazyColumn {
@@ -179,11 +181,11 @@ private object CharacterDetailsContent {
     }
 
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun Header(
         state: CharacterDetailsState.Loaded,
-        offsetY: Float
+        offsetY: Float,
+        onAction: (CharacterDetailsAction) -> Unit
     ) {
 
         val density = LocalDensity.current
@@ -217,9 +219,10 @@ private object CharacterDetailsContent {
                 )
 
                 AdditionalInfo(
+                    onAction = onAction,
                     gender = state.gender,
                     status = state.status,
-                    location = state.location.name
+                    location = state.location
                 )
 
             }
@@ -229,9 +232,10 @@ private object CharacterDetailsContent {
 
     @Composable
     private fun AdditionalInfo(
+        onAction: (CharacterDetailsAction) -> Unit,
         gender: CharacterGender,
         status: CharacterStatus,
-        location: String
+        location: LocationPreview
     ) = Row(
         modifier = Modifier
             .padding(8.dp)
@@ -250,8 +254,12 @@ private object CharacterDetailsContent {
         Spacer(Modifier.width(16.dp))
 
         IconWithImage(
-            modifier = Modifier.weight(1f),
-            imageVector = Icons.Rounded.Home, text = location
+            modifier = Modifier.weight(1f)
+                .clickable {
+                    onAction(CharacterDetailsAction.LocationSelection(location))
+                },
+            imageVector = Icons.Rounded.Home,
+            text = location.name
         )
 
         Spacer(Modifier.width(16.dp))

@@ -11,6 +11,7 @@ import org.mathieu.cleanrmapi.ui.core.ViewModel
 
 sealed interface CharacterDetailsAction {
     data class SelectedEpisode(val episode: Episode): CharacterDetailsAction
+    data class LocationSelection(val location: LocationPreview): CharacterDetailsAction
 }
 
 class CharacterDetailsViewModel :
@@ -54,6 +55,9 @@ class CharacterDetailsViewModel :
         when(action) {
             is CharacterDetailsAction.SelectedEpisode ->
                 sendEvent(Destination.EpisodeDetails(action.episode.id.toString()))
+
+            is CharacterDetailsAction.LocationSelection ->
+                sendEvent(Destination.LocationDetails(action.location.id.toString()))
         }
     }
 
