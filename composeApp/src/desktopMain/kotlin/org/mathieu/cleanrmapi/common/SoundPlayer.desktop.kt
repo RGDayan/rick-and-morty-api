@@ -9,7 +9,7 @@ import javax.sound.sampled.Clip
  * DesktopSoundPlayer is a concrete implementation of the SoundPlayer interface
  * designed to play sound files on desktop environments using the Java Sound API.
  *
- * This class handles the loading and playing of a specific sound file ("spawn.ogg")
+ * This class handles the loading and playing of a specific sound file
  * located in the "resources/raw/" directory. It utilizes the `AudioSystem` and
  * `Clip` classes from the `javax.sound.sampled` package to manage audio playback.
  *
@@ -23,7 +23,7 @@ class DesktopSoundPlayer : SoundPlayer {
     override fun playSound() {
         try {
             // Charger le fichier audio
-            val soundFile = File("resources/raw/spawn.ogg")
+            val soundFile = File("src/desktopMain/resources/raw/portal.wav")
             val audioInputStream: AudioInputStream = AudioSystem.getAudioInputStream(soundFile)
             val clip: Clip = AudioSystem.getClip()
             clip.open(audioInputStream)
