@@ -8,6 +8,7 @@ import org.mathieu.cleanrmapi.data.local.objects.toDBObject
 import org.mathieu.cleanrmapi.data.local.objects.toDetailedModel
 import org.mathieu.cleanrmapi.data.remote.LocationApi
 import org.mathieu.cleanrmapi.domain.character.CharacterRepository
+import org.mathieu.cleanrmapi.domain.character.models.Character
 import org.mathieu.cleanrmapi.domain.location.LocationRepository
 import org.mathieu.cleanrmapi.domain.location.models.Location
 
@@ -23,6 +24,15 @@ internal class LocationRepositoryImpl(
             idsToCharactersConverter = characterRepository::getCharactersFromIdList
         )
 
+    }
+
+    override suspend fun getCharactersFrom(locationId: Int): List<Character> {
+
+        val locationLocal = GetLocationObjectIfExists(locationId)
+
+        val idList = locationLocal.residentsIds
+
+        return characterRepository.getCharactersFromIdList(idList)
     }
 
 }

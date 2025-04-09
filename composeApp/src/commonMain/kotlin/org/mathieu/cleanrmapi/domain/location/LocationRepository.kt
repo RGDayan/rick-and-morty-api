@@ -1,5 +1,6 @@
 package org.mathieu.cleanrmapi.domain.location
 
+import org.mathieu.cleanrmapi.domain.character.models.Character
 import org.mathieu.cleanrmapi.domain.location.models.Location
 
 /**
@@ -20,4 +21,13 @@ interface LocationRepository {
      * @throws NoSuchElementException if no location is found with the given ID.
      */
     suspend fun getLocation(id: Int): Location
+
+
+    /**
+     * Fetches the characters of a specific origin.
+     *
+     * @param locationId The unique identifier of the location.
+     * @return Characters that plays from the specified location.
+     */
+    suspend fun getCharactersFrom(locationId: Int): List<Character>
 }
