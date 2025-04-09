@@ -1,15 +1,65 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop.
+# CleanRMAPI – Architecture Overview
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+**CleanRMAPI** is a Kotlin Multiplatform (KMP) project targeting both **Android** and **Desktop**, 
+built around Clean Architecture principles. 
+The structure is modular, with clear separation of concerns and a shared logic core across platforms.
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+---
 
+## 🔧 Architecture Breakdown
+
+### 🧠 **Domain Layer**
+- Shared across all platforms (`commonMain`)
+- Contains business rules, models, and repository interfaces
+- Platform-agnostic, pure Kotlin — no external dependencies
+
+### 🧰 **Application Layer**
+- Also in `commonMain`
+- Hosts shared `ViewModel`s and application logic
+- Manages UI state and user actions using sealed classes
+- Follows a unidirectional data flow architecture
+
+### 🌐 **Data Layer**
+- Mixed shared & platform-specific
+- **Networking:** Uses [Ktor](https://ktor.io) in `commonMain` to call APIs
+- **Caching:** Android uses Room (in `androidMain`); Desktop can use file or memory-based storage
+- Implements repository interfaces using DI bindings
+
+### 🖼️ **Presentation Layer**
+- UI logic is platform-specific
+- Android uses **Jetpack Compose**
+- Desktop uses **Compose for Desktop**
+- Both platforms consume the shared ViewModels for consistent behavior
+
+### 💉 **Dependency Injection**
+- Uses **Koin** across shared and platform code
+- Shared bindings (like repositories, use cases) in `commonMain`
+- Platform-specific modules for context-aware components like `SoundPlayer`
+
+---
+
+## 🔊 Platform Services
+
+To support features like sound playback:
+- A shared `SoundPlayer` interface is declared in `commonMain`
+- Android uses `MediaPlayer`, Desktop uses `AudioSystem` via `Clip`
+- Implementations are injected via platform-specific Koin modules
+
+---
+
+## 🗃️ Project Structure Highlights
+
+```bash
+src/
+├── commonMain/       # Shared logic (domain, app, ViewModels)
+├── androidMain/      # Android-specific (UI, Room, MediaPlayer)
+├── desktopMain/      # Desktop-specific (Compose, AudioSystem)
+```
+
+---
+
+This structure allows the app to reuse a majority of its codebase while staying adaptable 
+to platform-specific needs like multimedia, local storage, and UI frameworks.
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
 [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),

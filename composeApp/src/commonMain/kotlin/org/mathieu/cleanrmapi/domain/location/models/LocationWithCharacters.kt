@@ -6,6 +6,7 @@ import org.mathieu.cleanrmapi.domain.character.models.Character
  * Represents a location and its resident characters.
  *
  * Combines location details with a list of residing characters.
+ * It allows the domain ot create a location with a specific list of residents.
  *
  * @property id Unique identifier of the location.
  * @property name Name of the location.

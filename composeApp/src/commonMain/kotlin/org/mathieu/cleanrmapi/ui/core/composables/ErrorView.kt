@@ -1,4 +1,4 @@
-package org.mathieu.cleanrmapi.ui.screens
+package org.mathieu.cleanrmapi.ui.core.composables
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text

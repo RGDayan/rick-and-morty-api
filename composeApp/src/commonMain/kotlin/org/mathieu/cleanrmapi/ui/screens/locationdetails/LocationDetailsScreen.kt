@@ -21,29 +21,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import org.mathieu.cleanrmapi.ui.NavigationManager
 import org.mathieu.cleanrmapi.ui.core.composables.BackArrow
 import org.mathieu.cleanrmapi.ui.core.composables.IconWithImage
 import org.mathieu.cleanrmapi.ui.core.composables.Screen
 import org.mathieu.cleanrmapi.ui.core.theme.SurfaceColor
-import org.mathieu.cleanrmapi.ui.screens.ErrorView
-import org.mathieu.cleanrmapi.ui.screens.characterdetails.CharacterGrid
+import org.mathieu.cleanrmapi.ui.core.composables.ErrorView
+import org.mathieu.cleanrmapi.ui.core.composables.CharacterList
 
 /**
  * Displays the details for a given location.
  *
- * @param navController Navigation controller for handling screen transitions.
  * @param id The ID of the location to display.
  */
 @Composable
 fun LocationDetailsScreen(
-    navController: NavHostController,
     id: Int
 ) {
 
     Screen(
-        viewModel = viewModel { LocationDetailsViewModel() },
-        navController = navController
+        viewModel = viewModel { LocationDetailsViewModel() }
     ) { state, viewModel ->
 
         LaunchedEffect(key1 = Unit) {
@@ -52,7 +49,7 @@ fun LocationDetailsScreen(
 
         Content(
             state = state,
-            onClickBack = navController::popBackStack,
+            onClickBack = NavigationManager.navController::popBackStack,
             onAction = viewModel::handleAction
         )
 
@@ -99,7 +96,7 @@ private fun Content(
             is LocationDetailsState.Loaded -> Column {
                 Header(state = it)
                 // Characters' location display
-                CharacterGrid(
+                CharacterList(
                     characters = it.residents,
                     onCharacterClick = { character ->
                         onAction(LocationDetailsAction.SelectedCharacter(character))

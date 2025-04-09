@@ -4,7 +4,8 @@ import org.mathieu.cleanrmapi.domain.character.models.Character
 
 
 /**
- * Represents a specific location within a universe or dimension.
+ * Represents a location in the Rick and Morty API.
+ * A location is a specific place where characters reside or originate from.
  *
  * @property id The unique identifier for the location.
  * @property name The name of the location.

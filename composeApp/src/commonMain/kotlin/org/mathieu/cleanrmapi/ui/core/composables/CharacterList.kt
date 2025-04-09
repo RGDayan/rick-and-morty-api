@@ -1,4 +1,4 @@
-package org.mathieu.cleanrmapi.ui.screens.characterdetails
+package org.mathieu.cleanrmapi.ui.core.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import org.mathieu.cleanrmapi.domain.character.models.Character
-import org.mathieu.cleanrmapi.ui.core.composables.CharacterCard
 
 
 /**
@@ -20,7 +19,7 @@ import org.mathieu.cleanrmapi.ui.core.composables.CharacterCard
  *                         It receives the clicked [Character] as a parameter.
  */
 @Composable
-fun CharacterGrid(
+fun CharacterList(
     characters : List<Character>,
     onCharacterClick : (Character) -> Unit
 ) {

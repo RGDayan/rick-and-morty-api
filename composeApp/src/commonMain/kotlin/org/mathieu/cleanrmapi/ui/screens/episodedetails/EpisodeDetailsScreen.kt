@@ -18,24 +18,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.mathieu.cleanrmapi.ui.NavigationManager
 import org.mathieu.cleanrmapi.ui.core.composables.BackArrow
 import org.mathieu.cleanrmapi.ui.core.composables.PreviewContent
 import org.mathieu.cleanrmapi.ui.core.composables.Screen
 import org.mathieu.cleanrmapi.ui.core.theme.SurfaceColor
-import org.mathieu.cleanrmapi.ui.screens.ErrorView
-import org.mathieu.cleanrmapi.ui.screens.characterdetails.CharacterGrid
+import org.mathieu.cleanrmapi.ui.core.composables.ErrorView
+import org.mathieu.cleanrmapi.ui.core.composables.CharacterList
 
 @Composable
 fun EpisodeDetailsScreen(
-    navController: NavController,
     id: Int
 ) {
 
     Screen(
         viewModel = viewModel { EpisodeDetailsViewModel() },
-        navController = navController
     ) { state, viewModel ->
 
         LaunchedEffect(key1 = Unit) {
@@ -44,7 +42,7 @@ fun EpisodeDetailsScreen(
 
         Content(
             state = state,
-            onClickBack = navController::popBackStack,
+            onClickBack = NavigationManager.navController::popBackStack,
             onAction = viewModel::handleAction
         )
 
@@ -76,7 +74,7 @@ private fun Content(
             is EpisodeDetailsState.Error -> ErrorView(error = it.message)
             is EpisodeDetailsState.Loaded -> Column {
                 Header(state = it)
-                CharacterGrid(
+                CharacterList(
                     characters = it.characters,
                     onCharacterClick = { character ->
                         onAction(EpisodeDetailsAction.SelectedCharacter(character))
@@ -96,7 +94,7 @@ private fun Content(
  * Shows the episode's air date and title. The title uses a marquee effect for long text.
  *
  * Previously encapsulated in a Kotlin object.
- * Now a separated composable function from the body of the EpisodeDetailsScreen for clarity and reusability of CharacterGrid.
+ * Now a separated composable function from the body of the EpisodeDetailsScreen for clarity and reusability of CharacterList.
  *
  * @param state The loaded episode data containing the air date, episode number, and name.
  */

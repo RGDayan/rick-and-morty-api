@@ -6,7 +6,7 @@ import org.mathieu.cleanrmapi.domain.location.LocationRepository
 import org.mathieu.cleanrmapi.domain.location.models.LocationWithCharacters
 
 /**
- * `GetLocationWithCharacters` is a Koin component responsible for fetching a `Location`
+ * `GetLocationWithCharacters` is responsible for fetching a `Location`
  * along with its associated `Character` residents.
  *
  * It leverages the `LocationRepository` to retrieve both the location details and the list of characters
