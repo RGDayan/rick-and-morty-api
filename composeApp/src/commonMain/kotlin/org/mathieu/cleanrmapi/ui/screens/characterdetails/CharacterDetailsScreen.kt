@@ -222,7 +222,7 @@ private object CharacterDetailsContent {
                     onAction = onAction,
                     gender = state.gender,
                     status = state.status,
-                    location = state.location
+                    location = state.origin
                 )
 
             }

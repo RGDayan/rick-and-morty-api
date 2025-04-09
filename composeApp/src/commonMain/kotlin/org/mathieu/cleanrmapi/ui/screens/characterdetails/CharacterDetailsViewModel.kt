@@ -1,6 +1,7 @@
 package org.mathieu.cleanrmapi.ui.screens.characterdetails
 
 import org.koin.core.component.inject
+import org.mathieu.cleanrmapi.common.SoundPlayer
 import org.mathieu.cleanrmapi.domain.character.CharacterRepository
 import org.mathieu.cleanrmapi.domain.character.models.CharacterGender
 import org.mathieu.cleanrmapi.domain.character.models.CharacterStatus
@@ -18,6 +19,7 @@ class CharacterDetailsViewModel :
     ViewModel<CharacterDetailsState>(CharacterDetailsState.Loading) {
 
     private val characterRepository: CharacterRepository by inject()
+    private val soundPlayer: SoundPlayer by inject()
 
     fun init(characterId: Int) {
 
@@ -44,20 +46,35 @@ class CharacterDetailsViewModel :
                     CharacterDetailsState.Error(message = it.message ?: it.toString())
                 }
             }
-
-
         }
-
-
     }
 
+    /**
+     * Handles actions triggered within the Character Details screen.
+     *
+     * This function processes different actions related to the character details,
+     * such as selecting an episode or a location. Based on the action type,
+     * it performs specific operations like navigating to other screens or
+     * triggering side effects.
+     *
+     * @param action The [CharacterDetailsAction] to be handled. This represents
+     *               an event or interaction that occurred within the Character
+     *               Details screen.
+     *
+     * @see CharacterDetailsAction
+     * @see Destination
+     * @see soundPlayer
+     * @see sendEvent
+     */
     fun handleAction(action: CharacterDetailsAction) {
         when(action) {
             is CharacterDetailsAction.SelectedEpisode ->
                 sendEvent(Destination.EpisodeDetails(action.episode.id.toString()))
 
-            is CharacterDetailsAction.LocationSelection ->
+            is CharacterDetailsAction.LocationSelection -> {
+                soundPlayer.playSound()
                 sendEvent(Destination.LocationDetails(action.location.id.toString()))
+            }
         }
     }
 
